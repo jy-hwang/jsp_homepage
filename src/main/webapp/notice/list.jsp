@@ -136,8 +136,8 @@ ResultSet rSet = stmt.executeQuery(query);
         <nav class="menu">
           <h1>협력업체</h1>
           <ul>
-            <li><a target="_blank" href="http://www.notepubs.com"><img src="/assets/images/notepubs.png" alt="노트펍스" /></a></li>
-            <li><a target="_blank" href="http://www.namoolab.com"><img src="/assets/images/namoolab.png" alt="나무랩연구소" /></a></li>
+            <li><a target="_blank" href="http://www.notepubs.com"><img src="../assets/images/notepubs.png" alt="노트펍스" /></a></li>
+            <li><a target="_blank" href="http://www.namoolab.com"><img src="../assets/images/namoolab.png" alt="나무랩연구소" /></a></li>
 
           </ul>
         </nav>
