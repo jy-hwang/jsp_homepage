@@ -3,36 +3,6 @@
 <%@ page import="java.sql.ResultSet"%>
 <%@ page import="java.sql.PreparedStatement"%>
 <%@ page import="java.sql.DriverManager"%>
-<%
-
-int no = Integer.parseInt(request.getParameter("no"));
-
-String dbUrl = System.getProperty("db.url");
-String dbUsername = System.getProperty("db.username");
-String dbPassword = System.getProperty("db.password");
-Class.forName("org.mariadb.jdbc.Driver");
-
-Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
-
-String query = " SELECT no, writer_id AS writerId, title, content, files, hit, created_date AS createdDate, updated_date AS updatedDate FROM notice WHERE no = ?; ";
-
-PreparedStatement pStmt = con.prepareStatement(query);
-pStmt.setInt(1, no);
-
-ResultSet rSet = pStmt.executeQuery(); 
-rSet.next();
-int noticeNo = rSet.getInt("no");
-String title = rSet.getString("title");
-String createdDate = rSet.getString("createdDate");
-String writerId = rSet.getString("writerId");
-String files = rSet.getString("files") == null ? "" : rSet.getString("files");
-String content = rSet.getString("content");
-int hit = rSet.getInt("hit");
-
-rSet.close();
-pStmt.close();
-con.close();
-%>
 
 <!DOCTYPE html>
 <html>
@@ -183,24 +153,24 @@ con.close();
 							<tbody>
 								<tr>
 									<th>제목</th>
-									<td class="text-align-left text-indent text-strong text-orange" colspan="3"><%= title %></td>
+									<td class="text-align-left text-indent text-strong text-orange" colspan="3"><%= request.getAttribute("title") %></td>
 								</tr>
 								<tr>
 									<th>작성일</th>
-									<td class="text-align-left text-indent" colspan="3"><%= createdDate %></td>
+									<td class="text-align-left text-indent" colspan="3"><%= request.getAttribute("createdDate") %></td>
 								</tr>
 								<tr>
 									<th>작성자</th>
-									<td><%= writerId %></td>
+									<td><%= request.getAttribute("writerId") %></td>
 									<th>조회수</th>
-									<td><%= hit %></td>
+									<td><%= request.getAttribute("hit") %></td>
 								</tr>
 								<tr>
 									<th>첨부파일</th>
-									<td colspan="3"><%= files %></td>
+									<td colspan="3"><%= request.getAttribute("files") %></td>
 								</tr>
 								<tr class="content">
-									<td colspan="4"><%= content %></td>
+									<td colspan="4"><%= request.getAttribute("content") %></td>
 								</tr>
 							</tbody>
 						</table>

@@ -186,7 +186,7 @@ ResultSet rSet = stmt.executeQuery(query);
 <%  while(rSet.next()){ %>
               <tr>
                 <td><%= rSet.getInt("no") %></td>
-                <td class="title indent text-align-left"><a href="detail.jsp?no=<%= rSet.getInt("no") %>"><%= rSet.getString("title") %></a></td>
+                <td class="title indent text-align-left"><a href="detail?no=<%= rSet.getInt("no") %>"><%= rSet.getString("title") %></a></td>
                 <td><%= rSet.getString("writerId") %></td>
                 <td><%= rSet.getString("createdDate") %></td>
                 <td><%= rSet.getInt("hit") %></td>
