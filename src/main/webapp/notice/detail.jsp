@@ -21,7 +21,19 @@ pStmt.setInt(1, no);
 
 ResultSet rSet = pStmt.executeQuery(); 
 rSet.next();
+int noticeNo = rSet.getInt("no");
+String title = rSet.getString("title");
+String createdDate = rSet.getString("createdDate");
+String writerId = rSet.getString("writerId");
+String files = rSet.getString("files") == null ? "" : rSet.getString("files");
+String content = rSet.getString("content");
+int hit = rSet.getInt("hit");
+
+rSet.close();
+pStmt.close();
+con.close();
 %>
+
 <!DOCTYPE html>
 <html>
 
@@ -171,29 +183,29 @@ rSet.next();
 							<tbody>
 								<tr>
 									<th>제목</th>
-									<td class="text-align-left text-indent text-strong text-orange" colspan="3"><%= rSet.getString("title") %></td>
+									<td class="text-align-left text-indent text-strong text-orange" colspan="3"><%= title %></td>
 								</tr>
 								<tr>
 									<th>작성일</th>
-									<td class="text-align-left text-indent" colspan="3"><%= rSet.getString("title") %></td>
+									<td class="text-align-left text-indent" colspan="3"><%= createdDate %></td>
 								</tr>
 								<tr>
 									<th>작성자</th>
-									<td><%= rSet.getString("writerId") %></td>
+									<td><%= writerId %></td>
 									<th>조회수</th>
-									<td><%= rSet.getString("hit") %></td>
+									<td><%= hit %></td>
 								</tr>
 								<tr>
 									<th>첨부파일</th>
-									<td colspan="3"><%= rSet.getString("files") == null ? "" : rSet.getString("files") %></td>
+									<td colspan="3"><%= files %></td>
 								</tr>
 								<tr class="content">
-									<td colspan="4"><%= rSet.getString("content") %></td>
+									<td colspan="4"><%= content %></td>
 								</tr>
 							</tbody>
 						</table>
 					</div>
-					
+
 					<div class="margin-top text-align-center">
 						<a class="btn btn-list" href="list.jsp">목록</a>
 					</div>
@@ -256,8 +268,3 @@ rSet.next();
     </body>
     
     </html>
-<%
-rSet.close();
-pStmt.close();
-con.close();
-%>
