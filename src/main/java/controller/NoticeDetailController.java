@@ -11,6 +11,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import entity.Notice;
 
 @WebServlet("/notice/detail")
 public class NoticeDetailController extends HttpServlet{
@@ -35,6 +36,7 @@ public class NoticeDetailController extends HttpServlet{
 
       ResultSet rSet = pStmt.executeQuery(); 
       rSet.next();
+      
       int noticeNo = rSet.getInt("no");
       String title = rSet.getString("title");
       String createdDate = rSet.getString("createdDate");
@@ -43,13 +45,9 @@ public class NoticeDetailController extends HttpServlet{
       String content = rSet.getString("content");
       int hit = rSet.getInt("hit");
 
-      request.setAttribute("noticeNo", noticeNo);
-      request.setAttribute("title", title);
-      request.setAttribute("createdDate", createdDate);
-      request.setAttribute("writerId", writerId);
-      request.setAttribute("files", files);
-      request.setAttribute("content", content);
-      request.setAttribute("hit", hit);
+      Notice notice = new Notice(noticeNo, title, createdDate, writerId, files, content, hit);
+      
+      request.setAttribute("notice", notice);
       
       rSet.close();
       pStmt.close();
