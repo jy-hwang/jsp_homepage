@@ -14,7 +14,9 @@ import javax.servlet.http.HttpServletResponse;
 import entity.Notice;
 
 @WebServlet("/notice/detail")
-public class NoticeDetailController extends HttpServlet{
+public class NoticeDetailController extends HttpServlet {
+
+  private static final long serialVersionUID = 1L;
 
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -25,18 +27,23 @@ public class NoticeDetailController extends HttpServlet{
     String dbUrl = System.getProperty("db.url");
     String dbUsername = System.getProperty("db.username");
     String dbPassword = System.getProperty("db.password");
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+    Connection conn = null;
+
     try {
       Class.forName("org.mariadb.jdbc.Driver");
-      Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
+      conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
 
-      String query = " SELECT no, writer_id AS writerId, title, content, files, hit, created_date AS createdDate, updated_date AS updatedDate FROM notice WHERE no = ?; ";
+      String query =
+          " SELECT no, writer_id AS writerId, title, content, files, hit, created_date AS createdDate, updated_date AS updatedDate FROM notice WHERE no = ?; ";
 
-      PreparedStatement pStmt = con.prepareStatement(query);
+      pStmt = conn.prepareStatement(query);
       pStmt.setInt(1, no);
 
-      ResultSet rSet = pStmt.executeQuery(); 
+      rSet = pStmt.executeQuery();
       rSet.next();
-      
+
       int noticeNo = rSet.getInt("no");
       String title = rSet.getString("title");
       String createdDate = rSet.getString("createdDate");
@@ -46,26 +53,36 @@ public class NoticeDetailController extends HttpServlet{
       int hit = rSet.getInt("hit");
 
       Notice notice = new Notice(noticeNo, title, createdDate, writerId, files, content, hit);
-      
+
       request.setAttribute("notice", notice);
-      
-      rSet.close();
-      pStmt.close();
-      con.close();
+
+
     } catch (ClassNotFoundException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
     } catch (SQLException e) {
-      // TODO Auto-generated catch block
       e.printStackTrace();
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (SQLException e2) {
+        e2.printStackTrace();
+      }
     }
 
     // redirect : 아예 다른 요청
-    
+
     // forward : 앞 뒤를 연결하는 '같은 요청'.
-   request.getRequestDispatcher("/notice/detail.jsp").forward(request, response);
-    
+    request.getRequestDispatcher("/notice/detail.jsp").forward(request, response);
+
   }
-  
-  
+
+
 }
