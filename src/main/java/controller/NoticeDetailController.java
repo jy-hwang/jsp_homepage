@@ -80,7 +80,7 @@ public class NoticeDetailController extends HttpServlet {
     // redirect : 아예 다른 요청
 
     // forward : 앞 뒤를 연결하는 '같은 요청'.
-    request.getRequestDispatcher("/notice/detail.jsp").forward(request, response);
+    request.getRequestDispatcher("/WEB-INF/views/notice/detail.jsp").forward(request, response);
 
   }
 
