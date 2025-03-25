@@ -1,25 +1,6 @@
+<%@page import="entity.Notice"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.sql.Connection"%>
-<%@ page import="java.sql.ResultSet"%>
-<%@ page import="java.sql.Statement"%>
-<%@ page import="java.sql.DriverManager"%>
-
-<%
-
-String dbUrl = System.getProperty("db.url");
-String dbUsername = System.getProperty("db.username");
-String dbPassword = System.getProperty("db.password");
-Class.forName("org.mariadb.jdbc.Driver");
-
-Connection con = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
-
-String query = " SELECT no, writer_id AS writerId, title, content, hit, created_date AS createdDate, updated_date AS updatedDate FROM notice; ";
-
-Statement stmt = con.createStatement();
-
-ResultSet rSet = stmt.executeQuery(query); 
-
-%>
 <!DOCTYPE html>
 <html>
 
@@ -183,15 +164,21 @@ ResultSet rSet = stmt.executeQuery(query);
               </tr>
             </thead>
             <tbody>
-<%  while(rSet.next()){ %>
+<% 
+List<Notice> list = (List<Notice>)request.getAttribute("list");
+for(Notice notice : list){
+  pageContext.setAttribute("n", notice);
+%>
               <tr>
-                <td><%= rSet.getInt("no") %></td>
-                <td class="title indent text-align-left"><a href="detail?no=<%= rSet.getInt("no") %>"><%= rSet.getString("title") %></a></td>
-                <td><%= rSet.getString("writerId") %></td>
-                <td><%= rSet.getString("createdDate") %></td>
-                <td><%= rSet.getInt("hit") %></td>
+                <td>${n.noticeNo}</td>
+                <td class="title indent text-align-left"><a href="detail?no=${n.noticeNo }">${n.title }</a></td>
+                <td>${n.writerId}</td>
+                <td>${n.createdDate}</td>
+                <td>${n.hit }</td>
               </tr>
-<% } %>
+<%
+}
+%>
 
 
 
@@ -269,9 +256,3 @@ ResultSet rSet = stmt.executeQuery(query);
     </body>
     
     </html>
-
-<%
-rSet.close();
-stmt.close();
-con.close();
-%>
