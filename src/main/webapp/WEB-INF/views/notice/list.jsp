@@ -7,25 +7,23 @@
 <html>
 
 <head>
-  <title>코딩 전문가를 만들기 위한 온라인 강의 시스템</title>
-  <meta charset="UTF-8">
-  <title>공지사항목록</title>
-  
-  <link href="../assets/css/customer/layout.css" type="text/css" rel="stylesheet" />
-  <style>
-  
-    #visual .content-container{ 
-        height:inherit;
-        display:flex; 
-        align-items: center;
-        
-        background: url("../../images/customer/visual.png") no-repeat center;
-    }
-  </style>
+<title>코딩 전문가를 만들기 위한 온라인 강의 시스템</title>
+<meta charset="UTF-8">
+<title>공지사항목록</title>
+
+<link href="../assets/css/customer/layout.css" type="text/css" rel="stylesheet" />
+<style>
+#visual .content-container {
+  height: inherit;
+  display: flex;
+  align-items: center;
+  background: url("../../images/customer/visual.png") no-repeat center;
+}
+</style>
 </head>
 
 <body>
-    <!-- header 부분 -->
+  <!-- header 부분 -->
 
   <header id="header">
 
@@ -89,7 +87,7 @@
 
   <!-- --------------------------- <visual> --------------------------------------- -->
   <!-- visual 부분 -->
-  
+
   <div id="visual">
     <div class="content-container"></div>
   </div>
@@ -146,9 +144,9 @@
             <fieldset>
               <legend class="hidden">공지사항 검색 필드</legend>
               <label class="hidden">검색분류</label> <select name="f">
-                <option value="title">제목</option>
-                <option value="writerId">작성자</option>
-              </select> <label class="hidden">검색어</label> <input type="text" name="q" value="" /> <input class="btn btn-search" type="submit" value="검색" />
+                <option value="title" ${(param.f == "title")?"selected":""}>제목</option>
+                <option value="writer_id" ${(param.f == "writer_id")?"selected":""}>작성자</option>
+              </select> <label class="hidden">검색어</label> <input type="text" name="k" value="${param.k }" /> <input class="btn btn-search" type="submit" value="검색" />
             </fieldset>
           </form>
         </div>
@@ -218,36 +216,38 @@
 
 
 
-        <footer id="footer">
-            <div class="content-container">
-                <h2 id="footer-logo"><img src="../assets/images/logo-footer.png" alt="회사정보"></h2>
-    
-                <div id="company-info">
-                    <dl>
-                        <dt>주소:</dt>
-                        <dd>서울특별시 </dd>
-                        <dt>관리자메일:</dt>
-                        <dd>admin@newlecture.com</dd>
-                    </dl>
-                    <dl>
-                        <dt>사업자 등록번호:</dt>
-                        <dd>111-11-11111</dd>
-                        <dt>통신 판매업:</dt>
-                        <dd>신고제 1111 호</dd>
-                    </dl>
-                    <dl>
-                        <dt>상호:</dt>
-                        <dd>뉴렉처</dd>
-                        <dt>대표:</dt>
-                        <dd>홍길동</dd>
-                        <dt>전화번호:</dt>
-                        <dd>111-1111-1111</dd>
-                    </dl>
-                    <div id="copyright" class="margin-top">Copyright ⓒ newlecture.com 2012-2025 All Right Reserved.
-                        Contact admin@newlecture.com for more information</div>
-                </div>
-            </div>
-        </footer>
-    </body>
-    
-    </html>
+  <footer id="footer">
+    <div class="content-container">
+      <h2 id="footer-logo">
+        <img src="../assets/images/logo-footer.png" alt="회사정보">
+      </h2>
+
+      <div id="company-info">
+        <dl>
+          <dt>주소:</dt>
+          <dd>서울특별시</dd>
+          <dt>관리자메일:</dt>
+          <dd>admin@newlecture.com</dd>
+        </dl>
+        <dl>
+          <dt>사업자 등록번호:</dt>
+          <dd>111-11-11111</dd>
+          <dt>통신 판매업:</dt>
+          <dd>신고제 1111 호</dd>
+        </dl>
+        <dl>
+          <dt>상호:</dt>
+          <dd>뉴렉처</dd>
+          <dt>대표:</dt>
+          <dd>홍길동</dd>
+          <dt>전화번호:</dt>
+          <dd>111-1111-1111</dd>
+        </dl>
+        <div id="copyright" class="margin-top">Copyright ⓒ newlecture.com 2012-2025 All Right Reserved. Contact admin@newlecture.com for
+          more information</div>
+      </div>
+    </div>
+  </footer>
+</body>
+
+</html>

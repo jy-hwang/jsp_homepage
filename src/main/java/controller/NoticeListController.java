@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import entity.Notice;
 import service.NoticeService;
+import util.StringUtils;
 
 @WebServlet("/notice/list")
 public class NoticeListController extends HttpServlet {
@@ -19,9 +20,22 @@ public class NoticeListController extends HttpServlet {
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws ServletException, IOException {
 
+    String tempField = request.getParameter("f");
+    String tempKeyword = request.getParameter("k");
+    
+    String field = "title";
+    if(!StringUtils.isEmpty(tempField)){
+     field = tempField; 
+    }
+    
+    String keyword = "";
+    if(!StringUtils.isEmpty(tempKeyword)){
+      keyword = tempKeyword; 
+     }
+    
     NoticeService service = new NoticeService();
 
-    List<Notice> list = service.getNoticeList();
+    List<Notice> list = service.getNoticeList(field, keyword, 1);
 
     int totalCount = service.getNoticeCount();
     
