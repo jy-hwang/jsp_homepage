@@ -1,13 +1,13 @@
 package service;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import entity.Notice;
+import util.DatabaseUtil;
 
 public class NoticeService {
 
@@ -26,7 +26,7 @@ public class NoticeService {
   public List<Notice> getNoticeList(String field, String keyword, int page) {
     List<Notice> list = new ArrayList<Notice>();
 
-    // field <<- title, content, writer_id
+    // field <<- title, writer_id
 
     String query =
         " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate FROM notice"
@@ -43,19 +43,13 @@ public class NoticeService {
 
     int offset = (page - 1) * PAGE_SIZE;
 
-    String dbUrl = System.getProperty("db.url");
-    String dbUsername = System.getProperty("db.username");
-    String dbPassword = System.getProperty("db.password");
     Connection conn = null;
     PreparedStatement pStmt = null;
     ResultSet rSet = null;
 
     try {
-
-      Class.forName("org.mariadb.jdbc.Driver");
-
-      conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword);
-
+      conn = DatabaseUtil.getConnection();
+      
       pStmt = conn.prepareStatement(query);
       pStmt.setString(1, "%" + keyword + "%");
       pStmt.setInt(2, PAGE_SIZE);
@@ -64,7 +58,6 @@ public class NoticeService {
       rSet = pStmt.executeQuery();
 
       while (rSet.next()) {
-
         int noticeNo = rSet.getInt("no");
         String title = rSet.getString("title");
         String createdDate = rSet.getString("createdDate");
@@ -77,8 +70,6 @@ public class NoticeService {
         list.add(notice);
       }
       
-    } catch (ClassNotFoundException e) {
-      e.printStackTrace();
     } catch (SQLException e) {
       e.printStackTrace();
     } finally {
@@ -106,30 +97,196 @@ public class NoticeService {
   }
 
   public int getNoticeCount(String field, String keyword) {
-    String query = " SELECT count(*) as totalCount FROM notice ";
+    int count = 0;
+    String query = " SELECT count(no) as totalCount FROM notice "
+        + " WHERE "+ field + " LIKE ? ";
 
-    return 0;
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+
+    try {
+      conn = DatabaseUtil.getConnection();
+      
+      pStmt = conn.prepareStatement(query);
+      pStmt.setString(1, "%" + keyword + "%");
+      rSet = pStmt.executeQuery();
+
+      if (rSet.next()) {
+        count = rSet.getInt("totalCount");
+      }
+      
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (SQLException e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return count;
   }
 
   public Notice getNotice(int id) {
+    Notice notice = null;
+    
     String query =
         " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate FROM notice WHERE no = ? ";
 
-    return null;
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+
+    try {
+      conn = DatabaseUtil.getConnection();
+
+      pStmt = conn.prepareStatement(query);
+      pStmt.setInt(1, id);
+      rSet = pStmt.executeQuery();
+
+      if (rSet.next()) {
+        int noticeNo = rSet.getInt("no");
+        String title = rSet.getString("title");
+        String createdDate = rSet.getString("createdDate");
+        String writerId = rSet.getString("writerId");
+        String files = rSet.getString("files") == null ? "" : rSet.getString("files");
+        String content = rSet.getString("content");
+        int hit = rSet.getInt("hit");
+
+        notice = new Notice(noticeNo, title, createdDate, writerId, files, content, hit);
+      }
+      
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (SQLException e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return notice;
   }
 
   public Notice getNextNotice(int id) {
+    Notice notice = null;
+    
     String query =
-        " SELECT title FROM notice WHERE created_date > ( SELECT created_date FROM notice WHERE NO = ?) LIMIT 1 ";
+        " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate FROM notice "
+        + " WHERE created_date > ( SELECT created_date FROM notice WHERE NO = ?) LIMIT 1 ";
 
-    return null;
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+
+    try {
+      conn = DatabaseUtil.getConnection();
+
+      pStmt = conn.prepareStatement(query);
+      pStmt.setInt(1, id);
+      rSet = pStmt.executeQuery();
+
+      if (rSet.next()) {
+        int noticeNo = rSet.getInt("no");
+        String title = rSet.getString("title");
+        String createdDate = rSet.getString("createdDate");
+        String writerId = rSet.getString("writerId");
+        String files = rSet.getString("files") == null ? "" : rSet.getString("files");
+        String content = rSet.getString("content");
+        int hit = rSet.getInt("hit");
+
+        notice = new Notice(noticeNo, title, createdDate, writerId, files, content, hit);
+      }
+      
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (SQLException e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return notice;
   }
 
   public Notice getPrevNotice(int id) {
+    Notice notice = null;
+    
     String query =
-        " SELECT title FROM notice WHERE created_date < ( SELECT created_date FROM notice WHERE NO = ?) ORDER BY created_date DESC LIMIT 1 ";
+        " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate FROM notice "
+        + " WHERE created_date < ( SELECT created_date FROM notice WHERE NO = ?) ORDER BY created_date DESC LIMIT 1 ";
 
-    return null;
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+    ResultSet rSet = null;
+
+    try {
+      conn = DatabaseUtil.getConnection();
+
+      pStmt = conn.prepareStatement(query);
+      pStmt.setInt(1, id);
+      rSet = pStmt.executeQuery();
+
+      if (rSet.next()) {
+        int noticeNo = rSet.getInt("no");
+        String title = rSet.getString("title");
+        String createdDate = rSet.getString("createdDate");
+        String writerId = rSet.getString("writerId");
+        String files = rSet.getString("files") == null ? "" : rSet.getString("files");
+        String content = rSet.getString("content");
+        int hit = rSet.getInt("hit");
+
+        notice = new Notice(noticeNo, title, createdDate, writerId, files, content, hit);
+      }
+      
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (rSet != null) {
+          rSet.close();
+        }
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (SQLException e2) {
+        e2.printStackTrace();
+      }
+    }
+    
+    return notice;
   }
 
 }

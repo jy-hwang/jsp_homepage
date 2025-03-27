@@ -23,7 +23,9 @@ public class NoticeListController extends HttpServlet {
 
     List<Notice> list = service.getNoticeList();
 
-
+    int totalCount = service.getNoticeCount();
+    
+    System.out.println("totalCount : " + totalCount);
 
     request.setAttribute("list", list);
     // forward : 앞 뒤를 연결하는 '같은 요청'.
