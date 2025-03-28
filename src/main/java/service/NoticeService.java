@@ -7,11 +7,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import entity.Notice;
+import util.CommonBase;
 import util.DatabaseUtil;
 
 public class NoticeService {
-
-  public static final int PAGE_SIZE = 5;
 
   public List<Notice> getNoticeList() {
 
@@ -30,18 +29,15 @@ public class NoticeService {
 
     String query =
         " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate FROM notice"
-            + " WHERE "+ field +" LIKE ? LIMIT ? OFFSET ? ";
+            + " WHERE " + field + " LIKE ? ORDER BY created_date DESC LIMIT ? OFFSET ? ";
 
     /*
-     * 1, 6, 11, 16, 21, ... => an = 1 + (page - 1) * 5
-     * 5, 10, 15, 20, ... => page * 5
-     * pageSize 5
-     * page 4
-     * offset = (page - 1) * pageSize = (4 - 1) * 5 = 15
+     * 1, 6, 11, 16, 21, ... => an = 1 + (page - 1) * 5 5, 10, 15, 20, ... => page * 5 pageSize 5
+     * page 4 offset = (page - 1) * pageSize = (4 - 1) * 5 = 15
      *
      */
 
-    int offset = (page - 1) * PAGE_SIZE;
+    int offset = (page - 1) * CommonBase.PAGE_SIZE;
 
     Connection conn = null;
     PreparedStatement pStmt = null;
@@ -49,12 +45,12 @@ public class NoticeService {
 
     try {
       conn = DatabaseUtil.getConnection();
-      
+
       pStmt = conn.prepareStatement(query);
       pStmt.setString(1, "%" + keyword + "%");
-      pStmt.setInt(2, PAGE_SIZE);
+      pStmt.setInt(2, CommonBase.PAGE_SIZE);
       pStmt.setInt(3, offset);
-      
+
       rSet = pStmt.executeQuery();
 
       while (rSet.next()) {
@@ -69,7 +65,7 @@ public class NoticeService {
         Notice notice = new Notice(noticeNo, title, createdDate, writerId, files, content, hit);
         list.add(notice);
       }
-      
+
     } catch (SQLException e) {
       e.printStackTrace();
     } finally {
@@ -98,8 +94,7 @@ public class NoticeService {
 
   public int getNoticeCount(String field, String keyword) {
     int count = 0;
-    String query = " SELECT count(no) as totalCount FROM notice "
-        + " WHERE "+ field + " LIKE ? ";
+    String query = " SELECT count(no) as totalCount FROM notice " + " WHERE " + field + " LIKE ? ";
 
     Connection conn = null;
     PreparedStatement pStmt = null;
@@ -107,7 +102,7 @@ public class NoticeService {
 
     try {
       conn = DatabaseUtil.getConnection();
-      
+
       pStmt = conn.prepareStatement(query);
       pStmt.setString(1, "%" + keyword + "%");
       rSet = pStmt.executeQuery();
@@ -115,7 +110,7 @@ public class NoticeService {
       if (rSet.next()) {
         count = rSet.getInt("totalCount");
       }
-      
+
     } catch (SQLException e) {
       e.printStackTrace();
     } finally {
@@ -139,7 +134,7 @@ public class NoticeService {
 
   public Notice getNotice(int id) {
     Notice notice = null;
-    
+
     String query =
         " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate FROM notice WHERE no = ? ";
 
@@ -165,7 +160,7 @@ public class NoticeService {
 
         notice = new Notice(noticeNo, title, createdDate, writerId, files, content, hit);
       }
-      
+
     } catch (SQLException e) {
       e.printStackTrace();
     } finally {
@@ -189,10 +184,10 @@ public class NoticeService {
 
   public Notice getNextNotice(int id) {
     Notice notice = null;
-    
+
     String query =
         " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate FROM notice "
-        + " WHERE created_date > ( SELECT created_date FROM notice WHERE NO = ?) LIMIT 1 ";
+            + " WHERE created_date > ( SELECT created_date FROM notice WHERE NO = ?) LIMIT 1 ";
 
     Connection conn = null;
     PreparedStatement pStmt = null;
@@ -216,7 +211,7 @@ public class NoticeService {
 
         notice = new Notice(noticeNo, title, createdDate, writerId, files, content, hit);
       }
-      
+
     } catch (SQLException e) {
       e.printStackTrace();
     } finally {
@@ -240,10 +235,10 @@ public class NoticeService {
 
   public Notice getPrevNotice(int id) {
     Notice notice = null;
-    
+
     String query =
         " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate FROM notice "
-        + " WHERE created_date < ( SELECT created_date FROM notice WHERE NO = ?) ORDER BY created_date DESC LIMIT 1 ";
+            + " WHERE created_date < ( SELECT created_date FROM notice WHERE NO = ?) ORDER BY created_date DESC LIMIT 1 ";
 
     Connection conn = null;
     PreparedStatement pStmt = null;
@@ -267,7 +262,7 @@ public class NoticeService {
 
         notice = new Notice(noticeNo, title, createdDate, writerId, files, content, hit);
       }
-      
+
     } catch (SQLException e) {
       e.printStackTrace();
     } finally {
@@ -285,7 +280,7 @@ public class NoticeService {
         e2.printStackTrace();
       }
     }
-    
+
     return notice;
   }
 

@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 
 <%@ page import="entity.Notice"%>
 <%@ page import="java.util.List"%>
@@ -178,31 +179,46 @@
             </tbody>
           </table>
         </div>
+<c:set var="page" value="${(empty param.p) ? 1 : param.p }"/>   
+<c:set var="pageSize" value="${pagination.pageSize }"/>       
+<c:set var="pageBlockSize" value="${pagination.pageBlockSize }"/>       
+<c:set var="startNum" value="${page - (page - 1) % pageBlockSize }"/>
+<c:set var="totalCount" value="${totalCount }"/>       
+<c:set var="endNum" value="${fn:substringBefore(Math.ceil(totalCount/pageSize),'.') }"/>
 
         <div class="indexer margin-top align-right">
           <h3 class="hidden">현재 페이지</h3>
           <div>
-            <span class="text-orange text-strong">1</span> / 1 pages
+            <span class="text-orange text-strong">${(empty param.p) ? 1 : param.p }</span> / ${endNum } pages
           </div>
         </div>
-
+      
         <div class="margin-top align-center pager">
-
           <div>
 
-
+<c:if test="${startNum  > 1}">
+            <a class="btn btn-prev" href="?p=${startNum - 1}&f=${param.f }&k=${param.k}">이전</a>
+</c:if>
+<c:if test="${startNum <= 1 }">
             <span class="btn btn-prev" onclick="alert('이전 페이지가 없습니다.');">이전</span>
-
+</c:if>
           </div>
-          <ul class="-list- center">
-            <li><a class="-text- orange bold" href="?p=1&t=&q=">1</a></li>
 
+          <ul class="-list- center">
+<c:forEach var="i" begin="0" end="${pageBlockSize - 1 }">
+  <c:if test="${(startNum + i) <= endNum }">
+            <li><a class="-text- orange ${param.p == startNum + i ? 'bold' : '' }" href="?p=${startNum + i}&f=${param.f }&k=${param.k}">${startNum + i}</a></li>
+  </c:if>
+</c:forEach>
           </ul>
           <div>
 
-
+<c:if test="${startNum + pageBlockSize <= endNum }">
+            <a class="btn btn-next" href="?p=${startNum + pageBlockSize}&f=${param.f }&k=${param.k}">다음</a>
+</c:if>
+<c:if test="${startNum + pageBlockSize > endNum }">
             <span class="btn btn-next" onclick="alert('다음 페이지가 없습니다.');">다음</span>
-
+</c:if>
           </div>
 
         </div>

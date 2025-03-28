@@ -15,8 +15,8 @@ public class Notice {
 
   private int hit;
 
-  public Notice(){}
-  
+  public Notice() {}
+
   public Notice(int noticeNo, String title, String createdDate, String writerId, String files,
       String content, int hit) {
     this.noticeNo = noticeNo;
