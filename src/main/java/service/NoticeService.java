@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import entity.Notice;
 import util.CommonBase;
@@ -56,7 +57,7 @@ public class NoticeService {
       while (rSet.next()) {
         int noticeNo = rSet.getInt("no");
         String title = rSet.getString("title");
-        String createdDate = rSet.getString("createdDate");
+        Date createdDate = rSet.getDate("createdDate");
         String writerId = rSet.getString("writerId");
         String files = rSet.getString("files") == null ? "" : rSet.getString("files");
         String content = rSet.getString("content");
@@ -152,7 +153,7 @@ public class NoticeService {
       if (rSet.next()) {
         int noticeNo = rSet.getInt("no");
         String title = rSet.getString("title");
-        String createdDate = rSet.getString("createdDate");
+        Date createdDate = rSet.getDate("createdDate");
         String writerId = rSet.getString("writerId");
         String files = rSet.getString("files") == null ? "" : rSet.getString("files");
         String content = rSet.getString("content");
@@ -203,7 +204,7 @@ public class NoticeService {
       if (rSet.next()) {
         int noticeNo = rSet.getInt("no");
         String title = rSet.getString("title");
-        String createdDate = rSet.getString("createdDate");
+        Date createdDate = rSet.getDate("createdDate");
         String writerId = rSet.getString("writerId");
         String files = rSet.getString("files") == null ? "" : rSet.getString("files");
         String content = rSet.getString("content");
@@ -254,7 +255,7 @@ public class NoticeService {
       if (rSet.next()) {
         int noticeNo = rSet.getInt("no");
         String title = rSet.getString("title");
-        String createdDate = rSet.getString("createdDate");
+        Date createdDate = rSet.getDate("createdDate");
         String writerId = rSet.getString("writerId");
         String files = rSet.getString("files") == null ? "" : rSet.getString("files");
         String content = rSet.getString("content");

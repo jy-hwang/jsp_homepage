@@ -1,11 +1,15 @@
 package entity;
 
+import java.util.Date;
+
 public class Notice {
   private int noticeNo;
 
   private String title;
 
-  private String createdDate;
+  private Date createdDate;
+
+  private Date updatedDate;
 
   private String writerId;
 
@@ -17,8 +21,9 @@ public class Notice {
 
   public Notice() {}
 
-  public Notice(int noticeNo, String title, String createdDate, String writerId, String files,
+  public Notice(int noticeNo, String title, Date createdDate, String writerId, String files,
       String content, int hit) {
+    super();
     this.noticeNo = noticeNo;
     this.title = title;
     this.createdDate = createdDate;
@@ -44,12 +49,20 @@ public class Notice {
     this.title = title;
   }
 
-  public String getCreatedDate() {
+  public Date getCreatedDate() {
     return createdDate;
   }
 
-  public void setCreatedDate(String createdDate) {
+  public void setCreatedDate(Date createdDate) {
     this.createdDate = createdDate;
+  }
+
+  public Date getUpdatedDate() {
+    return updatedDate;
+  }
+
+  public void setUpdatedDate(Date updatedDate) {
+    this.updatedDate = updatedDate;
   }
 
   public String getWriterId() {
@@ -87,9 +100,8 @@ public class Notice {
   @Override
   public String toString() {
     return "Notice [noticeNo=" + noticeNo + ", title=" + title + ", createdDate=" + createdDate
-        + ", writerId=" + writerId + ", files=" + files + ", content=" + content + ", hit=" + hit
-        + "]";
+        + ", updatedDate=" + updatedDate + ", writerId=" + writerId + ", files=" + files
+        + ", content=" + content + ", hit=" + hit + "]";
   }
-
 
 }
