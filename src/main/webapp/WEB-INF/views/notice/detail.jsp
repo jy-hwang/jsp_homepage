@@ -1,4 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html>
 
@@ -17,6 +21,7 @@
             
             background: url("../../images/customer/visual.png") no-repeat center;
         }
+        
     </style>
 </head>
 
@@ -152,17 +157,29 @@
 								</tr>
 								<tr>
 									<th>작성일</th>
-									<td class="text-align-left text-indent" colspan="3">${notice.createdDate }</td>
+									<td class="text-align-left text-indent" colspan="3"><fmt:formatDate pattern="yyyy-MM-dd hh:mm:ss" value="${notice.createdDate }"/></td>
 								</tr>
 								<tr>
 									<th>작성자</th>
 									<td>${notice.writerId }</td>
 									<th>조회수</th>
-									<td>${notice.hit }</td>
+									<td><fmt:formatNumber value="${notice.hit }" /></td>
 								</tr>
 								<tr>
 									<th>첨부파일</th>
-									<td colspan="3">${notice.files }</td>
+									<td colspan="3" class="text-align-left text-indent">
+
+<c:forTokens var="fileName" items="${notice.files }" delims="," varStatus="st">
+<c:set var="style" value=""/>
+<c:if test="${fn:endsWith(fileName, 'zip') }">
+  <c:set var="style" value="text-strong text-green"/>
+</c:if>
+                    <a class="${style }" href="${fileName }">${fn:toUpperCase(fileName) }</a>
+  <c:if test="${!st.last}">
+/
+  </c:if>
+</c:forTokens>
+                  </td>
 								</tr>
 								<tr class="content">
 									<td colspan="4">${notice.content }</td>
