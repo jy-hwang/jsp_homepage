@@ -56,6 +56,6 @@ public class NoticeListController extends HttpServlet {
     // forward : 앞 뒤를 연결하는 '같은 요청'.
     request.getRequestDispatcher("/WEB-INF/views/notice/list.jsp").forward(request, response);
 
-
   }
+  
 }
