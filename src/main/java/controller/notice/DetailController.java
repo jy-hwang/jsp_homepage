@@ -1,4 +1,4 @@
-package controller;
+package controller.notice;
 
 import java.io.IOException;
 import javax.servlet.ServletException;
@@ -10,7 +10,7 @@ import entity.Notice;
 import service.NoticeService;
 
 @WebServlet("/notice/detail")
-public class NoticeDetailController extends HttpServlet {
+public class DetailController extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
 

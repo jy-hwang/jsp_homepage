@@ -1,4 +1,4 @@
-package controller;
+package controller.notice;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -15,7 +15,7 @@ import util.CommonBase;
 import util.StringUtils;
 
 @WebServlet("/notice/list")
-public class NoticeListController extends HttpServlet {
+public class ListController extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
 
