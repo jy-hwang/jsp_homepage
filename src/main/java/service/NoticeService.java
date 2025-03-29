@@ -14,6 +14,38 @@ import util.DatabaseUtil;
 
 public class NoticeService {
 
+  /* Admin 용 서비스 추가*/
+  public int publishNoticeAll(int[] ids) {
+    
+    return 0;
+  }
+
+  public int removeNoticeAll(int[] ids) {
+    
+    return 0;
+  }
+
+  public int insertNotice(Notice notice) {
+    
+    return 0;
+  }
+
+  public int deleteNotice(int id) {
+    
+    return 0;
+  }
+
+  public int updateNotice(Notice notice) {
+    
+    return 0;
+  }
+
+  public List<Notice> getNoticeNewestList() {
+    
+    return null;
+  }
+
+  /* 일반 사용자용 서비스 */  
   public List<NoticeView> getNoticeList() {
 
     return getNoticeList("title", "", 1);
@@ -63,8 +95,9 @@ public class NoticeService {
         String files = rSet.getString("files") == null ? "" : rSet.getString("files");
         int hit = rSet.getInt("hit");
         int commentCount = rSet.getInt("commentCount");
-        
-        NoticeView notice = new NoticeView(noticeNo, title, createdDate, writerId, files, hit, commentCount);
+
+        NoticeView notice =
+            new NoticeView(noticeNo, title, createdDate, writerId, files, hit, commentCount);
         list.add(notice);
       }
 
