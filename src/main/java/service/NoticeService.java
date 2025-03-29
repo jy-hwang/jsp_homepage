@@ -8,29 +8,30 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import entity.Notice;
+import entity.NoticeView;
 import util.CommonBase;
 import util.DatabaseUtil;
 
 public class NoticeService {
 
-  public List<Notice> getNoticeList() {
+  public List<NoticeView> getNoticeList() {
 
     return getNoticeList("title", "", 1);
   }
 
-  public List<Notice> getNoticeList(int page) {
+  public List<NoticeView> getNoticeList(int page) {
 
     return getNoticeList("title", "", page);
   }
 
-  public List<Notice> getNoticeList(String field, String keyword, int page) {
-    List<Notice> list = new ArrayList<Notice>();
+  public List<NoticeView> getNoticeList(String field, String keyword, int page) {
+    List<NoticeView> list = new ArrayList<NoticeView>();
 
     // field <<- title, writer_id
 
     String query =
-        " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate FROM notice"
-            + " WHERE " + field + " LIKE ? ORDER BY created_date DESC LIMIT ? OFFSET ? ";
+        " SELECT no, title, writerId, hit, files, createdDate, updatedDate, commentCount FROM notice_view "
+            + " WHERE " + field + " LIKE ? ORDER BY createdDate DESC LIMIT ? OFFSET ? ";
 
     /*
      * 1, 6, 11, 16, 21, ... => an = 1 + (page - 1) * 5 5, 10, 15, 20, ... => page * 5 pageSize 5
@@ -60,10 +61,10 @@ public class NoticeService {
         Date createdDate = rSet.getDate("createdDate");
         String writerId = rSet.getString("writerId");
         String files = rSet.getString("files") == null ? "" : rSet.getString("files");
-        String content = rSet.getString("content");
         int hit = rSet.getInt("hit");
-
-        Notice notice = new Notice(noticeNo, title, createdDate, writerId, files, content, hit);
+        int commentCount = rSet.getInt("commentCount");
+        
+        NoticeView notice = new NoticeView(noticeNo, title, createdDate, writerId, files, hit, commentCount);
         list.add(notice);
       }
 

@@ -1276,3 +1276,9 @@ main .class-room .category {
 	background: gray;
 	
 }
+
+/* --- custom --------------------------------------------------------------- */
+.padding-left-10{
+  padding-left: 10px;
+}
+

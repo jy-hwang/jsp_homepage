@@ -9,7 +9,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import entity.Notice;
+import entity.NoticeView;
 import service.NoticeService;
 import util.CommonBase;
 import util.StringUtils;
@@ -42,7 +42,7 @@ public class NoticeListController extends HttpServlet {
     }
 
     NoticeService service = new NoticeService();
-    List<Notice> list = service.getNoticeList(field, keyword, page);
+    List<NoticeView> list = service.getNoticeList(field, keyword, page);
     int totalCount = service.getNoticeCount(field, keyword);
 
     Map<String, Integer> pagination = new HashMap<String, Integer>();
