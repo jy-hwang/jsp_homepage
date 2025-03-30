@@ -5,32 +5,39 @@ import java.util.Date;
 public class Notice {
   private int noticeNo;
 
-  private String title;
-
-  private Date createdDate;
-
-  private Date updatedDate;
-
   private String writerId;
+  
+  private String title;
+  
+  private String content;
 
   private String files;
 
-  private String content;
-
   private int hit;
 
-  public Notice() {}
+  private Date createdDate;
+  
+  private Date updatedDate;
+  
+  private Date deletedDate;
 
-  public Notice(int noticeNo, String title, Date createdDate, String writerId, String files,
-      String content, int hit) {
+  private boolean disclose;
+
+  public Notice(){}
+
+  public Notice(int noticeNo, String writerId, String title, String content, String files, int hit,
+      Date createdDate, Date updatedDate, Date deletedDate, boolean disclose) {
     super();
     this.noticeNo = noticeNo;
-    this.title = title;
-    this.createdDate = createdDate;
     this.writerId = writerId;
-    this.files = files;
+    this.title = title;
     this.content = content;
+    this.files = files;
     this.hit = hit;
+    this.createdDate = createdDate;
+    this.updatedDate = updatedDate;
+    this.deletedDate = deletedDate;
+    this.disclose = disclose;
   }
 
   public int getNoticeNo() {
@@ -41,12 +48,44 @@ public class Notice {
     this.noticeNo = noticeNo;
   }
 
+  public String getWriterId() {
+    return writerId;
+  }
+
+  public void setWriterId(String writerId) {
+    this.writerId = writerId;
+  }
+
   public String getTitle() {
     return title;
   }
 
   public void setTitle(String title) {
     this.title = title;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public void setContent(String content) {
+    this.content = content;
+  }
+
+  public String getFiles() {
+    return files;
+  }
+
+  public void setFiles(String files) {
+    this.files = files;
+  }
+
+  public int getHit() {
+    return hit;
+  }
+
+  public void setHit(int hit) {
+    this.hit = hit;
   }
 
   public Date getCreatedDate() {
@@ -65,43 +104,20 @@ public class Notice {
     this.updatedDate = updatedDate;
   }
 
-  public String getWriterId() {
-    return writerId;
+  public Date getDeletedDate() {
+    return deletedDate;
   }
 
-  public void setWriterId(String writerId) {
-    this.writerId = writerId;
+  public void setDeletedDate(Date deletedDate) {
+    this.deletedDate = deletedDate;
   }
 
-  public String getFiles() {
-    return files;
+  public boolean isDisclose() {
+    return disclose;
   }
 
-  public void setFiles(String files) {
-    this.files = files;
+  public void setDisclose(boolean disclose) {
+    this.disclose = disclose;
   }
-
-  public String getContent() {
-    return content;
-  }
-
-  public void setContent(String content) {
-    this.content = content;
-  }
-
-  public int getHit() {
-    return hit;
-  }
-
-  public void setHit(int hit) {
-    this.hit = hit;
-  }
-
-  @Override
-  public String toString() {
-    return "Notice [noticeNo=" + noticeNo + ", title=" + title + ", createdDate=" + createdDate
-        + ", updatedDate=" + updatedDate + ", writerId=" + writerId + ", files=" + files
-        + ", content=" + content + ", hit=" + hit + "]";
-  }
-
+  
 }

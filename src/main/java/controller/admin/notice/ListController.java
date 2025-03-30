@@ -54,8 +54,36 @@ public class ListController extends HttpServlet {
     request.setAttribute("totalCount", totalCount);
 
     // forward : 앞 뒤를 연결하는 '같은 요청'.
-    request.getRequestDispatcher("/WEB-INF/views/admin/board/notice/list.jsp").forward(request, response);
+    request.getRequestDispatcher("/WEB-INF/views/admin/board/notice/list.jsp")
+    .forward(request,response);
 
   }
-  
+
+  @Override
+  protected void doPost(HttpServletRequest request, HttpServletResponse response)
+      throws ServletException, IOException {
+
+    String[] openIds = request.getParameterValues("open-id");
+    String[] delIds = request.getParameterValues("del-id");
+    String cmd = request.getParameter("cmd");
+    NoticeService service = new NoticeService();
+
+    switch (cmd) {
+      case "일괄공개":
+        for (String openId : openIds) {
+          System.out.printf("open id : %s%n", openId);
+        }
+        break;
+
+      case "일괄삭제":
+        int[] ids = new int[delIds.length];
+        for (int i = 0; i < delIds.length; i++) {
+          ids[i] = Integer.parseInt(delIds[i]);
+        }
+        int result = service.removeNoticeAll(ids);
+        break;
+    }
+
+  }
+
 }

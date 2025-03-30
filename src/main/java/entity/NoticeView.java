@@ -16,15 +16,11 @@ public class NoticeView extends Notice {
 
   public NoticeView() {}
 
-  public NoticeView(int noticeNo, String title, Date createdDate, String writerId, String files,
-      int hit, int commentCount) {
-    super(noticeNo, title, createdDate, writerId, files, "", hit);
+  public NoticeView(int noticeNo, String writerId, String title, String files, int hit
+      , Date createdDate, Date updatedDate, Date deletedDate
+      , boolean isDisclose, int commentCount) {
+    super(noticeNo, writerId, title, "", files, hit, createdDate, updatedDate, deletedDate, isDisclose);
     this.commentCount = commentCount;
   }
 
 }
-/*
-(int noticeNo, String title, Date createdDate, String writerId, String files,
-      String content, int hit) {
-
-*/

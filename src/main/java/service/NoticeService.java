@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,14 +16,52 @@ import util.DatabaseUtil;
 public class NoticeService {
 
   /* Admin 용 서비스 추가*/
-  public int publishNoticeAll(int[] ids) {
+  public int discloseNoticeAll(int[] ids) {
     
     return 0;
   }
 
   public int removeNoticeAll(int[] ids) {
+    int result = 0;
+
+    String params = "";
     
-    return 0;
+    for(int i = 0; i<ids.length; i++){
+     params += ids[i];
+     
+     if(i < ids.length-1){
+       params += ",";
+     }
+    }
+           
+    String query = " UPDATE notice SET deleted_date = NULL WHERE NO IN ("+ params +") ";
+    Connection conn = null;
+    Statement stmt = null;
+
+    try {
+      conn = DatabaseUtil.getConnection();
+
+      stmt = conn.createStatement();
+      // pStmt.setInt(1, id);
+      result = stmt.executeUpdate(query);
+
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (stmt != null) {
+          stmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (SQLException e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return result;
   }
 
   public int insertNotice(Notice notice) {
@@ -62,7 +101,7 @@ public class NoticeService {
     // field <<- title, writer_id
 
     String query =
-        " SELECT no, title, writerId, hit, files, createdDate, updatedDate, commentCount FROM notice_view "
+        " SELECT no, title, writerId, hit, files, createdDate, updatedDate, deletedDate, isDisclose, commentCount FROM notice_view "
             + " WHERE " + field + " LIKE ? ORDER BY createdDate DESC LIMIT ? OFFSET ? ";
 
     /*
@@ -90,14 +129,17 @@ public class NoticeService {
       while (rSet.next()) {
         int noticeNo = rSet.getInt("no");
         String title = rSet.getString("title");
-        Date createdDate = rSet.getDate("createdDate");
         String writerId = rSet.getString("writerId");
         String files = rSet.getString("files") == null ? "" : rSet.getString("files");
         int hit = rSet.getInt("hit");
+        Date createdDate = rSet.getDate("createdDate");
+        Date updatedDate = rSet.getDate("updatedDate");
+        Date deletedDate = rSet.getDate("deletedDate");
+        boolean isDisclose = rSet.getBoolean("isDisclose"); 
         int commentCount = rSet.getInt("commentCount");
 
         NoticeView notice =
-            new NoticeView(noticeNo, title, createdDate, writerId, files, hit, commentCount);
+            new NoticeView(noticeNo, writerId, title, files, hit, createdDate, updatedDate, deletedDate, isDisclose, commentCount);
         list.add(notice);
       }
 
@@ -171,7 +213,7 @@ public class NoticeService {
     Notice notice = null;
 
     String query =
-        " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate FROM notice WHERE no = ? ";
+        " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate, deleted_date AS deletedDate FROM notice WHERE no = ? ";
 
     Connection conn = null;
     PreparedStatement pStmt = null;
@@ -186,14 +228,16 @@ public class NoticeService {
 
       if (rSet.next()) {
         int noticeNo = rSet.getInt("no");
-        String title = rSet.getString("title");
-        Date createdDate = rSet.getDate("createdDate");
         String writerId = rSet.getString("writerId");
-        String files = rSet.getString("files") == null ? "" : rSet.getString("files");
+        String title = rSet.getString("title");
         String content = rSet.getString("content");
+        String files = rSet.getString("files") == null ? "" : rSet.getString("files");
+        Date createdDate = rSet.getDate("createdDate");
+        Date updatedDate = rSet.getDate("updatedDate");
+        Date deletedDate = rSet.getDate("deletedDate");
         int hit = rSet.getInt("hit");
 
-        notice = new Notice(noticeNo, title, createdDate, writerId, files, content, hit);
+        notice = new Notice(noticeNo, writerId, title, content, files, hit, createdDate, updatedDate, deletedDate, false);
       }
 
     } catch (SQLException e) {
@@ -221,8 +265,8 @@ public class NoticeService {
     Notice notice = null;
 
     String query =
-        " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate FROM notice "
-            + " WHERE created_date > ( SELECT created_date FROM notice WHERE NO = ?) LIMIT 1 ";
+        " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate, deleted_date AS deletedDate FROM notice "
+            + " WHERE created_date > ( SELECT created_date FROM notice WHERE NO = ? AND deleted_date IS NOT NULL) LIMIT 1 ";
 
     Connection conn = null;
     PreparedStatement pStmt = null;
@@ -237,14 +281,16 @@ public class NoticeService {
 
       if (rSet.next()) {
         int noticeNo = rSet.getInt("no");
-        String title = rSet.getString("title");
-        Date createdDate = rSet.getDate("createdDate");
         String writerId = rSet.getString("writerId");
-        String files = rSet.getString("files") == null ? "" : rSet.getString("files");
+        String title = rSet.getString("title");
         String content = rSet.getString("content");
+        String files = rSet.getString("files") == null ? "" : rSet.getString("files");
+        Date createdDate = rSet.getDate("createdDate");
+        Date updatedDate = rSet.getDate("updatedDate");
+        Date deletedDate = rSet.getDate("deletedDate");
         int hit = rSet.getInt("hit");
-
-        notice = new Notice(noticeNo, title, createdDate, writerId, files, content, hit);
+        
+        notice = new Notice(noticeNo, writerId, title, content, files, hit, createdDate, updatedDate, deletedDate, false);
       }
 
     } catch (SQLException e) {
@@ -272,8 +318,8 @@ public class NoticeService {
     Notice notice = null;
 
     String query =
-        " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate FROM notice "
-            + " WHERE created_date < ( SELECT created_date FROM notice WHERE NO = ?) ORDER BY created_date DESC LIMIT 1 ";
+        " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate, deleted_date AS deletedDate FROM notice "
+            + " WHERE created_date < ( SELECT created_date FROM notice WHERE NO = ? AND deleted_date IS NOT NULL) ORDER BY created_date DESC LIMIT 1 ";
 
     Connection conn = null;
     PreparedStatement pStmt = null;
@@ -288,14 +334,16 @@ public class NoticeService {
 
       if (rSet.next()) {
         int noticeNo = rSet.getInt("no");
-        String title = rSet.getString("title");
-        Date createdDate = rSet.getDate("createdDate");
         String writerId = rSet.getString("writerId");
-        String files = rSet.getString("files") == null ? "" : rSet.getString("files");
+        String title = rSet.getString("title");
         String content = rSet.getString("content");
+        String files = rSet.getString("files") == null ? "" : rSet.getString("files");
+        Date createdDate = rSet.getDate("createdDate");
+        Date updatedDate = rSet.getDate("updatedDate");
+        Date deletedDate = rSet.getDate("deletedDate");
         int hit = rSet.getInt("hit");
 
-        notice = new Notice(noticeNo, title, createdDate, writerId, files, content, hit);
+        notice = new Notice(noticeNo, writerId, title, content, files, hit, createdDate, updatedDate, deletedDate, false);
       }
 
     } catch (SQLException e) {

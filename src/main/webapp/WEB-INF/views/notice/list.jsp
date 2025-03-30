@@ -170,7 +170,14 @@
 <c:forEach var="n" items="${list}">
               <tr>
                 <td>${n.noticeNo}</td>
-                <td class="title indent text-align-left"><a href="detail?no=${n.noticeNo }">${n.title }</a><span class="padding-left-10">[${n.commentCount }]</span></td>
+                <td class="title indent text-align-left">
+  <c:if test="${empty n.deletedDate }">
+                <a href="detail?no=${n.noticeNo }">${n.title }</a><span class="padding-left-10">[${n.commentCount }]</span>
+  </c:if>
+  <c:if test="${!empty n.deletedDate }">
+                [삭제된 공지사항입니다]
+  </c:if>
+                </td>
                 <td>${n.writerId}</td>
                 <td><fmt:formatDate pattern="yyyy-MM-dd" value="${n.createdDate }"/></td>
                 <td><fmt:formatNumber value="${n.hit }" /></td>
@@ -265,6 +272,7 @@
       </div>
     </div>
   </footer>
+  
 </body>
 
 </html>
