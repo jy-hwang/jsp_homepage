@@ -14,7 +14,7 @@ import service.NoticeService;
 import util.CommonBase;
 import util.StringUtils;
 
-@WebServlet("/admin/notice/list")
+@WebServlet("/admin/board/notice/list")
 public class ListController extends HttpServlet {
 
   private static final long serialVersionUID = 1L;
