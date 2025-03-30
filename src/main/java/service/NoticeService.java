@@ -213,7 +213,7 @@ public class NoticeService {
     Notice notice = null;
 
     String query =
-        " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate, deleted_date AS deletedDate FROM notice WHERE no = ? ";
+        " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate, deleted_date AS deletedDate, is_disclose AS isDisclose FROM notice WHERE no = ? ";
 
     Connection conn = null;
     PreparedStatement pStmt = null;
@@ -236,8 +236,9 @@ public class NoticeService {
         Date updatedDate = rSet.getDate("updatedDate");
         Date deletedDate = rSet.getDate("deletedDate");
         int hit = rSet.getInt("hit");
+        boolean disclose = rSet.getBoolean("isDisclose");
 
-        notice = new Notice(noticeNo, writerId, title, content, files, hit, createdDate, updatedDate, deletedDate, false);
+        notice = new Notice(noticeNo, writerId, title, content, files, hit, createdDate, updatedDate, deletedDate, disclose);
       }
 
     } catch (SQLException e) {
@@ -265,7 +266,7 @@ public class NoticeService {
     Notice notice = null;
 
     String query =
-        " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate, deleted_date AS deletedDate FROM notice "
+        " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate, deleted_date AS deletedDate, is_disclose AS isDisclose FROM notice "
             + " WHERE created_date > ( SELECT created_date FROM notice WHERE NO = ? AND deleted_date IS NOT NULL) LIMIT 1 ";
 
     Connection conn = null;
@@ -289,8 +290,9 @@ public class NoticeService {
         Date updatedDate = rSet.getDate("updatedDate");
         Date deletedDate = rSet.getDate("deletedDate");
         int hit = rSet.getInt("hit");
-        
-        notice = new Notice(noticeNo, writerId, title, content, files, hit, createdDate, updatedDate, deletedDate, false);
+        boolean disclose = rSet.getBoolean("isDisclose");
+
+        notice = new Notice(noticeNo, writerId, title, content, files, hit, createdDate, updatedDate, deletedDate, disclose);
       }
 
     } catch (SQLException e) {
@@ -318,7 +320,7 @@ public class NoticeService {
     Notice notice = null;
 
     String query =
-        " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate, deleted_date AS deletedDate FROM notice "
+        " SELECT no, writer_id AS writerId, title, content, hit, files, created_date AS createdDate, updated_date AS updatedDate, deleted_date AS deletedDate, is_disclose AS isDisclose FROM notice "
             + " WHERE created_date < ( SELECT created_date FROM notice WHERE NO = ? AND deleted_date IS NOT NULL) ORDER BY created_date DESC LIMIT 1 ";
 
     Connection conn = null;
@@ -342,8 +344,9 @@ public class NoticeService {
         Date updatedDate = rSet.getDate("updatedDate");
         Date deletedDate = rSet.getDate("deletedDate");
         int hit = rSet.getInt("hit");
+        boolean disclose = rSet.getBoolean("isDisclose");
 
-        notice = new Notice(noticeNo, writerId, title, content, files, hit, createdDate, updatedDate, deletedDate, false);
+        notice = new Notice(noticeNo, writerId, title, content, files, hit, createdDate, updatedDate, deletedDate, disclose);
       }
 
     } catch (SQLException e) {

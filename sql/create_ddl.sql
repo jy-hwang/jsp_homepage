@@ -10,8 +10,10 @@ CREATE TABLE `notice` (
   `files` varchar(100) DEFAULT NULL,
   `created_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_date` timestamp NULL DEFAULT NULL,
+  `deleted_date` timestamp NULL DEFAULT NULL,
+  `is_disclose` tinyint(4) DEFAULT 0,
   PRIMARY KEY (`no`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 DROP TABLE IF EXISTS comment;
 
@@ -26,7 +28,8 @@ CREATE TABLE `comment` (
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
-CREATE OR REPLACE VIEW notice_view
+CREATE OR REPLACE
+VIEW notice_view
 AS
 SELECT n.no
      , count(c.NO) AS commentCount
@@ -36,9 +39,10 @@ SELECT n.no
      , files
      , n.created_date AS createdDate
      , n.updated_date AS updatedDate
+     , n.deleted_date AS deletedDate
+     , is_disclose AS isDisclose
   FROM notice n
   LEFT OUTER JOIN comment c 
     ON n.NO = c.notice_no
- GROUP BY n.NO, n.writer_id, n.title, hit, files
-
+ GROUP BY n.NO, n.writer_id, n.title, hit, files, is_disclose
  

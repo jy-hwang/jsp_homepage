@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import entity.Notice;
 
 @WebServlet("/admin/board/notice/reg")
 public class RegController extends HttpServlet {
@@ -24,9 +25,13 @@ public class RegController extends HttpServlet {
     
     String title = request.getParameter("title");
     String content = request.getParameter("content");
-    
     String tempDisclose= request.getParameter("disclose");
     
+    Notice notice = new Notice();
+    notice.setTitle(title);
+    notice.setContent(content);
+    
+    response.setContentType("text/html; charset=UTF-8");
     PrintWriter out = response.getWriter();
     
     out.printf("title : %s <br >",title);
