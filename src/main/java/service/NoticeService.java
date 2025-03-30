@@ -65,8 +65,40 @@ public class NoticeService {
   }
 
   public int insertNotice(Notice notice) {
-    
-    return 0;
+    int result = 0;
+          
+    String query = " INSERT INTO notice (writer_id, title, content, files, is_disclose) VALUES (?, ?, ?, ?, ?) ";
+    Connection conn = null;
+    PreparedStatement pStmt = null;
+
+    try {
+      conn = DatabaseUtil.getConnection();
+
+      pStmt = conn.prepareStatement(query);
+      pStmt.setString(1, notice.getWriterId());
+      pStmt.setString(2, notice.getTitle());
+      pStmt.setString(3, notice.getContent());
+      pStmt.setString(4, notice.getFiles());
+      pStmt.setBoolean(5, notice.isDisclose());
+      result = pStmt.executeUpdate();
+
+    } catch (SQLException e) {
+      e.printStackTrace();
+    } finally {
+      try {
+        if (pStmt != null) {
+          pStmt.close();
+        }
+        if (conn != null) {
+          conn.close();
+        }
+      } catch (SQLException e2) {
+        e2.printStackTrace();
+      }
+    }
+
+    return result;
+
   }
 
   public int deleteNotice(int id) {
