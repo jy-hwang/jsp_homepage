@@ -17,11 +17,8 @@ import service.NoticeService;
 import util.StringUtils;
 
 @MultipartConfig(
-    //location = "/tmp",
-    fileSizeThreshold = 1024 * 1014
-    , maxFileSize = 1024 * 1024 * 5
-    , maxRequestSize = 1024 * 1024 * 5 * 5
-    )
+    // location = "/tmp",
+    fileSizeThreshold = 1024 * 1014, maxFileSize = 1024 * 1024 * 5, maxRequestSize = 1024 * 1024 * 5 * 5)
 @WebServlet("/admin/board/notice/reg")
 public class RegController extends HttpServlet {
   @Override
@@ -37,39 +34,44 @@ public class RegController extends HttpServlet {
     File projectFolder = new File(tempPath);
     String projectName = projectFolder.getName();
     String realPath = getRealUploadPath(projectName);
-    
+
     String title = request.getParameter("title");
     String content = request.getParameter("content");
     String tempDisclose = request.getParameter("disclose");
-    
+
     Collection<Part> parts = request.getParts();
     StringBuilder builder = new StringBuilder();
-    for(Part p : parts){
-      
-      if(p.getName().equals("file") && p.getSize() > 0){
-        
-        Part filePart = p;
-        String fileName = filePart.getSubmittedFileName();
-        
-        builder.append(fileName);
-        builder.append(",");
-        InputStream fis = filePart.getInputStream();
-        
-        String filePath = realPath + File.separator + fileName;
-        FileOutputStream fos = new FileOutputStream(filePath);
-    
-        byte[] buf = new byte[1024];
-        int size = 0;
-        while ((size = fis.read(buf)) != -1) {
-          fos.write(buf, 0, size);
-        }
-        fos.close();
-        fis.close();
+    for (Part p : parts) {
+
+      if (!p.getName().equals("file"))
+        continue;
+      if (p.getSize() == 0)
+        continue;
+
+      Part filePart = p;
+      String fileName = filePart.getSubmittedFileName();
+
+      builder.append(fileName);
+      builder.append(",");
+      InputStream fis = filePart.getInputStream();
+
+      String filePath = realPath + File.separator + fileName;
+      FileOutputStream fos = new FileOutputStream(filePath);
+
+      byte[] buf = new byte[1024];
+      int size = 0;
+
+      while ((size = fis.read(buf)) != -1) {
+        fos.write(buf, 0, size);
       }
+
+      fos.close();
+      fis.close();
     }
+
     int tempLength = builder.length();
     builder.delete(tempLength - 1, tempLength);
-    
+
 
     boolean disclose = false;
 
@@ -90,25 +92,25 @@ public class RegController extends HttpServlet {
     response.sendRedirect("list");
 
   }
-  
-  public String getRealUploadPath(String projectName){
+
+  public String getRealUploadPath(String projectName) {
     String tempUploadPath = System.getProperty("upload.path");
 
     String uploadPath = tempUploadPath + projectName + "/uploads";
-    
+
     File uploadDir = new File(uploadPath);
     if (!uploadDir.exists()) {
-        boolean created = uploadDir.mkdirs(); // 상위 디렉토리까지 모두 생성
-        if (created) {
-            System.out.println("업로드 폴더 생성됨: " + uploadPath);
-        } else {
-            System.out.println("업로드 폴더 생성 실패!");
-        }
+      boolean created = uploadDir.mkdirs();
+      if (created) {
+        System.out.println("업로드 폴더 생성됨: " + uploadPath);
+      } else {
+        System.out.println("업로드 폴더 생성 실패!");
+      }
     } else {
-        System.out.println("업로드 폴더가 이미 존재함.");
-    } 
-    
+      System.out.println("업로드 폴더가 이미 존재함.");
+    }
+
     return uploadPath;
   }
-  
+
 }
