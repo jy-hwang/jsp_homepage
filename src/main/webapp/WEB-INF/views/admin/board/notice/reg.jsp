@@ -153,14 +153,25 @@
                 <tbody>
                   <tr>
                     <th>제목</th>
-                    <td class="text-align-left text-indent text-strong text-orange" colspan="3"><input type="text" name="title" /></td>
+                    <td class="text-align-left text-indent text-strong text-orange" colspan="3"><input type="text" name="title" required/></td>
                   </tr>
                   <tr>
                     <th>첨부파일</th>
                     <td colspan="3" class="text-align-left text-indent"><input type="file" name="file" /></td>
                   </tr>
+                  <tr>
+                    <th>첨부파일</th>
+                    <td colspan="3" class="text-align-left text-indent"><input type="file" name="file" /></td>
+                  </tr>
+                  <tr>
+                    <th>첨부파일</th>
+                    <td colspan="3" class="text-align-left text-indent"><input type="file" name="file" /></td>
+                  </tr>
+                  <tr>
+                  <td  colspan="4" class="text-align-right">1개당 파일의 크기는 5MB 이하로 제한됩니다.</td>
+                  </tr>
                   <tr class="content">
-                    <td colspan="4"><textarea class="content" name="content"></textarea></td>
+                    <td colspan="4"><textarea class="content" name="content" required></textarea></td>
                   </tr>
                   <tr>
                     <td colspan="4" class="text-align-right"><input class="vertical-align" type="checkbox" id="disclose" name="disclose" value="true"><label for="disclose" class="margin-left">바로공개</label></td>
