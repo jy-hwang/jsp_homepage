@@ -20,8 +20,7 @@ public class ListController extends HttpServlet {
   private static final long serialVersionUID = 1L;
 
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     String tempField = request.getParameter("f");
     String tempKeyword = request.getParameter("k");
@@ -54,14 +53,12 @@ public class ListController extends HttpServlet {
     request.setAttribute("totalCount", totalCount);
 
     // forward : 앞 뒤를 연결하는 '같은 요청'.
-    request.getRequestDispatcher("/WEB-INF/views/admin/board/notice/list.jsp")
-    .forward(request,response);
+    request.getRequestDispatcher("/WEB-INF/views/admin/board/notice/list.jsp").forward(request, response);
 
   }
 
   @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     String[] openIds = request.getParameterValues("open-id");
     String[] delIds = request.getParameterValues("del-id");

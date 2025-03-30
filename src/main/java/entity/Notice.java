@@ -6,9 +6,9 @@ public class Notice {
   private int noticeNo;
 
   private String writerId;
-  
+
   private String title;
-  
+
   private String content;
 
   private String files;
@@ -16,17 +16,16 @@ public class Notice {
   private int hit;
 
   private Date createdDate;
-  
+
   private Date updatedDate;
-  
+
   private Date deletedDate;
 
   private boolean disclose;
 
-  public Notice(){}
+  public Notice() {}
 
-  public Notice(int noticeNo, String writerId, String title, String content, String files, int hit,
-      Date createdDate, Date updatedDate, Date deletedDate, boolean disclose) {
+  public Notice(int noticeNo, String writerId, String title, String content, String files, int hit, Date createdDate, Date updatedDate, Date deletedDate, boolean disclose) {
     super();
     this.noticeNo = noticeNo;
     this.writerId = writerId;
@@ -119,5 +118,5 @@ public class Notice {
   public void setDisclose(boolean disclose) {
     this.disclose = disclose;
   }
-  
+
 }

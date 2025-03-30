@@ -15,9 +15,9 @@ import util.DatabaseUtil;
 
 public class NoticeService {
 
-  /* Admin 용 서비스 추가*/
+  /* Admin 용 서비스 추가 */
   public int discloseNoticeAll(int[] ids) {
-    
+
     return 0;
   }
 
@@ -25,16 +25,16 @@ public class NoticeService {
     int result = 0;
 
     String params = "";
-    
-    for(int i = 0; i<ids.length; i++){
-     params += ids[i];
-     
-     if(i < ids.length-1){
-       params += ",";
-     }
+
+    for (int i = 0; i < ids.length; i++) {
+      params += ids[i];
+
+      if (i < ids.length - 1) {
+        params += ",";
+      }
     }
-           
-    String query = " UPDATE notice SET deleted_date = NULL WHERE NO IN ("+ params +") ";
+
+    String query = " UPDATE notice SET deleted_date = NULL WHERE NO IN (" + params + ") ";
     Connection conn = null;
     Statement stmt = null;
 
@@ -66,7 +66,7 @@ public class NoticeService {
 
   public int insertNotice(Notice notice) {
     int result = 0;
-          
+
     String query = " INSERT INTO notice (writer_id, title, content, files, is_disclose) VALUES (?, ?, ?, ?, ?) ";
     Connection conn = null;
     PreparedStatement pStmt = null;
@@ -102,21 +102,21 @@ public class NoticeService {
   }
 
   public int deleteNotice(int id) {
-    
+
     return 0;
   }
 
   public int updateNotice(Notice notice) {
-    
+
     return 0;
   }
 
   public List<Notice> getNoticeNewestList() {
-    
+
     return null;
   }
 
-  /* 일반 사용자용 서비스 */  
+  /* 일반 사용자용 서비스 */
   public List<NoticeView> getNoticeList() {
 
     return getNoticeList("title", "", 1);
@@ -132,13 +132,11 @@ public class NoticeService {
 
     // field <<- title, writer_id
 
-    String query =
-        " SELECT no, title, writerId, hit, files, createdDate, updatedDate, deletedDate, isDisclose, commentCount FROM notice_view "
-            + " WHERE " + field + " LIKE ? ORDER BY createdDate DESC LIMIT ? OFFSET ? ";
+    String query = " SELECT no, title, writerId, hit, files, createdDate, updatedDate, deletedDate, isDisclose, commentCount FROM notice_view " + " WHERE " + field
+        + " LIKE ? ORDER BY createdDate DESC LIMIT ? OFFSET ? ";
 
     /*
-     * 1, 6, 11, 16, 21, ... => an = 1 + (page - 1) * 5 5, 10, 15, 20, ... => page * 5 pageSize 5
-     * page 4 offset = (page - 1) * pageSize = (4 - 1) * 5 = 15
+     * 1, 6, 11, 16, 21, ... => an = 1 + (page - 1) * 5 5, 10, 15, 20, ... => page * 5 pageSize 5 page 4 offset = (page - 1) * pageSize = (4 - 1) * 5 = 15
      *
      */
 
@@ -167,11 +165,10 @@ public class NoticeService {
         Date createdDate = rSet.getDate("createdDate");
         Date updatedDate = rSet.getDate("updatedDate");
         Date deletedDate = rSet.getDate("deletedDate");
-        boolean isDisclose = rSet.getBoolean("isDisclose"); 
+        boolean isDisclose = rSet.getBoolean("isDisclose");
         int commentCount = rSet.getInt("commentCount");
 
-        NoticeView notice =
-            new NoticeView(noticeNo, writerId, title, files, hit, createdDate, updatedDate, deletedDate, isDisclose, commentCount);
+        NoticeView notice = new NoticeView(noticeNo, writerId, title, files, hit, createdDate, updatedDate, deletedDate, isDisclose, commentCount);
         list.add(notice);
       }
 

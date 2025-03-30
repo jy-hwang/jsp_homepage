@@ -13,16 +13,14 @@ import util.StringUtils;
 @WebServlet("/admin/board/notice/reg")
 public class RegController extends HttpServlet {
   @Override
-  protected void doGet(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     // forward : 앞 뒤를 연결하는 '같은 요청'.
-    request.getRequestDispatcher("/WEB-INF/views/admin/board/notice/reg.jsp").forward(request,response);
+    request.getRequestDispatcher("/WEB-INF/views/admin/board/notice/reg.jsp").forward(request, response);
   }
 
   @Override
-  protected void doPost(HttpServletRequest request, HttpServletResponse response)
-      throws ServletException, IOException {
+  protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
     String title = request.getParameter("title");
     String content = request.getParameter("content");
