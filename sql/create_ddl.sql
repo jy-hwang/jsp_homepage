@@ -21,7 +21,7 @@ CREATE TABLE `comment` (
   `no` bigint(20) NOT NULL AUTO_INCREMENT,
   `writer_id` varchar(20) DEFAULT NULL,
   `notice_no` bigint(20) DEFAULT NULL, 
-  `content` varchar(512)) DEFAULT NULL,
+  `content` varchar(512) DEFAULT NULL,
   `created_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_date` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`no`)
